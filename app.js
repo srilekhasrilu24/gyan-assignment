@@ -43,6 +43,26 @@ app.get('/', (req, res) => {
 
 app.post("/events/create", (req, res) => {
     const { eventName, cityName, date, time, latitude, longitude } = req.body;
+    if ((!latitude && !longitude && !date)) {
+      return res.status(400).json({ Error: "Enter latitude, longitude, and date" });
+  
+    }
+    else if (latitude && !longitude && !date) {
+      return res.status(400).json({ Error: "Enter longitude, and date" });
+    }
+    else if (!latitude && longitude && !date){
+      return res.status(400).json({ Error: "Enter latitude, and date" });
+    }
+    else if (!latitude && !longitude && date){
+      return res.status(400).json({ Error: "Enter latitude, and longitude" });
+    }
+    else if (!latitude && longitude && date) {
+      return res.status(400).json({ Error: "Enter latitude" });
+    } else if (latitude && !longitude && date) {
+      return res.status(400).json({ Error: "Enter longitude" });
+    } else if (latitude && longitude && !date) {
+      return res.status(400).json({ Error: "Enter date" });
+    }
     const sql = "INSERT INTO backendtable (event_name, city_name, date, time, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?)";
     connection.query(sql, [eventName, cityName, date, time, latitude, longitude], (err, result) => {
       if (err) {
@@ -55,8 +75,29 @@ app.post("/events/create", (req, res) => {
     });
   });
 
-app.get("/events/find", async (req, res) => {
+app.post("/events/find", async (req, res) => {
+
     const { latitude, longitude, date } = req.body;
+    if ((!latitude && !longitude && !date)) {
+      return res.status(400).json({ Error: "Enter latitude, longitude, and date" });
+  
+    }
+    else if (latitude && !longitude && !date) {
+      return res.status(400).json({ Error: "Enter longitude, and date" });
+    }
+    else if (!latitude && longitude && !date){
+      return res.status(400).json({ Error: "Enter latitude, and date" });
+    }
+    else if (!latitude && !longitude && date){
+      return res.status(400).json({ Error: "Enter latitude, and longitude" });
+    }
+    else if (!latitude && longitude && date) {
+      return res.status(400).json({ Error: "Enter latitude" });
+    } else if (latitude && !longitude && date) {
+      return res.status(400).json({ Error: "Enter longitude" });
+    } else if (latitude && longitude && !date) {
+      return res.status(400).json({ Error: "Enter date" });
+    }
     const page = req.query.page || 1;
     const limit = 10;
     const skip = (page - 1) * limit;
